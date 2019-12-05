@@ -1,0 +1,127 @@
+on init
+
+make_perfview
+set_ui_height(6)
+
+declare ui_label $myLb(2,1)
+set_text($myLb,"             github.com/dastudio")
+move_control($myLb,5,15)
+
+{Reverb}
+declare ui_button $Reverb
+$Reverb := 1
+move_control($Reverb,1,2)
+
+declare ui_knob	$RevVol (0,1000000,1)
+set_knob_unit ($RevVol,$KNOB_UNIT_DB)
+set_knob_defval ($RevVol,500000)
+move_control ($RevVol,1,3)
+
+declare ui_knob	$RevTime (0,1000000,1)
+set_knob_unit ($RevTime,$KNOB_UNIT_DB)
+set_knob_defval ($RevTime,500000)
+move_control ($RevTime,1,5)
+
+{Delay}
+declare ui_button $Delay
+$Delay :=1
+move_control($Delay,2,2)
+
+declare ui_knob	$DelayVol (0,1000000,1)
+set_knob_unit ($DelayVol,$KNOB_UNIT_DB)
+set_knob_defval ($DelayVol,500000)
+move_control ($DelayVol,2,3)
+
+declare ui_knob	$DelTime (0,1000000,1)
+set_knob_unit ($DelTime,$KNOB_UNIT_DB)
+set_knob_defval ($DelTime,7)
+move_control ($DelTime,2,5)
+
+{Set Key Colors}
+declare $keys
+set_key_color(36, $KEY_COLOR_RED)
+set_key_color(38, $KEY_COLOR_MAGENTA)
+$keys := 40
+while ($keys<52)
+set_key_color($keys, $KEY_COLOR_NONE)
+inc($keys)
+end while
+
+set_key_color(52, $KEY_COLOR_RED)
+set_key_color(53, $KEY_COLOR_MAGENTA)
+$keys := 54
+while ($keys<72)
+set_key_color($keys, $KEY_COLOR_GREEN)
+inc($keys)
+end while
+
+set_key_color(72, $KEY_COLOR_RED)
+set_key_color(74, $KEY_COLOR_MAGENTA)
+$keys := 75
+while ($keys<92)
+set_key_color($keys, $KEY_COLOR_CYAN)
+inc($keys)
+end while
+
+{persistent}
+make_persistent($Delay)
+make_persistent($Reverb)
+make_persistent($RevVol)
+make_persistent($RevTime)
+make_persistent($DelayVol)
+make_persistent($DelTime)
+
+{ui init}
+$RevVol := get_engine_par($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,1,0)
+$RevTime := get_engine_par($ENGINE_PAR_RV2_TIME,-1,1,0)
+$DelayVol := get_engine_par($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,0,0)
+$DelTime := get_engine_par($ENGINE_PAR_RDL_TIME,-1,0,0)
+set_knob_label ($RevVol,_get_engine_par_disp($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,1,0))
+set_knob_label ($RevTime,_get_engine_par_disp($ENGINE_PAR_RV2_TIME,-1,1,0))
+set_knob_label ($DelayVol,_get_engine_par_disp($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,0,0))
+set_knob_label ($DelTime,_get_engine_par_disp($ENGINE_PAR_RDL_TIME,-1,0,0))
+
+
+end on
+
+{Events}
+on ui_control($Delay)
+if ($Delay=1)
+set_engine_par($ENGINE_PAR_SEND_EFFECT_BYPASS,0,-1,0,0)
+else
+set_engine_par($ENGINE_PAR_SEND_EFFECT_BYPASS,1,-1,0,0)
+end if
+end on
+
+on ui_control($Reverb)
+if($Reverb=1)
+set_engine_par($ENGINE_PAR_SEND_EFFECT_BYPASS,0,-1,1,0)
+else
+set_engine_par($ENGINE_PAR_SEND_EFFECT_BYPASS,1,-1,1,0)
+end if
+end on
+
+
+on ui_control($RevVol)
+set_engine_par($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,$RevVol,-1,1,0)
+set_knob_label ($RevVol,_get_engine_par_disp($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,1,0))
+end on
+
+on ui_control($RevTime)
+set_engine_par($ENGINE_PAR_RV2_TIME,$RevTime,-1,1,0)
+set_knob_label ($RevTime,_get_engine_par_disp($ENGINE_PAR_RV2_TIME,-1,1,0))
+end on
+
+on ui_control($DelayVol)
+set_engine_par($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,$DelayVol,-1,0,0)
+set_knob_label ($DelayVol,_get_engine_par_disp($ENGINE_PAR_SEND_EFFECT_OUTPUT_GAIN,-1,0,0))
+end on
+
+on ui_control($DelTime)
+set_engine_par($ENGINE_PAR_RDL_TIME,$DelTime,-1,0,0)
+set_knob_label ($DelTime,_get_engine_par_disp($ENGINE_PAR_RDL_TIME,-1,0,0))
+
+end on
+
+
+
