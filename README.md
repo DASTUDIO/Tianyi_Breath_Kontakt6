@@ -7,6 +7,3 @@
 
 ![preview](https://github.com/DASTUDIO/Tianyi_Breath_Kontakt6/raw/master/pic.png)
 
-### 提示
-之前的邮箱i@da.studio不再使用 
-新email: davidjang@live.com
